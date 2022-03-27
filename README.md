@@ -17,7 +17,7 @@ Since the restriction of the Unicode code-space to 21-bit values in 2003, UTF-8 
 | U+0800           | U+FFFF          | 1110xxxx | 10xxxxxx | 10xxxxxx |	         |
 | U+10000          | U+10FFFF        | 11110xxx | 10xxxxxx | 10xxxxxx | 10xxxxxx |
 
-https://goplay.tools/snippet/1vLIf-g2oiG
+https://goplay.tools/snippet/8LXkmaio6gJ
 
 ```go
 // EncodeRune writes into p (which must be large enough) the UTF-8 encoding of the rune.
@@ -43,6 +43,33 @@ func EncodeRune(p []byte, r rune) int {
 		p[2] = 0b10000000 | byte(r>>6)&0b00111111
 		p[3] = 0b10000000 | byte(r)&0b00111111
 		return 4
+	}
+}
+
+const RuneError = '\uFFFD' // the "error" Rune or "Unicode replacement character"
+
+// DecodeRune unpacks the first UTF-8 encoding in p and returns the rune and
+// its width in bytes. If p is empty it returns (RuneError, 0). Otherwise, if
+// the encoding is invalid, it returns (RuneError, 1). Both are impossible
+// results for correct, non-empty UTF-8.
+func DecodeRune(p []byte) (r rune, size int) {
+	n := len(p)
+	if n < 1 {
+		return RuneError, 0
+	}
+	p0 := p[0]
+	if p0 < 1<<7 {
+		return rune(p0), 1
+	}
+	switch {
+	case p0&0b11100000 == 0b11000000:
+		return rune(p0&0b00011111)<<6 | rune(p[1]&0b00111111), 2
+	case p0&0b11110000 == 0b11100000:
+		return rune(p0&0b00001111)<<12 | rune(p[1]&0b00111111)<<6 | rune(p[2]&0b00111111), 3
+	case p0&0b11111000 == 0b11110000:
+		return rune(p0&0b00000111)<<18 | rune(p[1]&0b00111111)<<12 | rune(p[2]&0b00111111)<<6 | rune(p[3]&0b00111111), 4
+	default:
+		return RuneError, 0
 	}
 }
 ```
