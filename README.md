@@ -10,11 +10,9 @@ See https://en.wikipedia.org/wiki/UTF-8
 
 Since the restriction of the Unicode code-space to 21-bit values in 2003, UTF-8 is defined to encode code points in one to four bytes, depending on the number of significant bits in the numerical value of the code point. The following table shows the structure of the encoding. The x characters are replaced by the bits of the code point.
 
-+------------------+-----------------+----------+----------+----------+----------+
 | First code point | Last code point | Byte 1   | Byte 2   | Byte 3   | Byte 4   |
-+------------------+-----------------+----------+----------+----------+----------+
+|------------------|-----------------|----------|----------|----------|----------|
 | U+0000           | U+007F          | 0xxxxxxx	|          |          |          |
 | U+0080           | U+07FF          | 110xxxxx | 10xxxxxx |	        |          |
 | U+0800           | U+FFFF          | 1110xxxx | 10xxxxxx | 10xxxxxx |	         |
 | U+10000          | U+10FFFF        | 11110xxx | 10xxxxxx | 10xxxxxx | 10xxxxxx |
-+------------------+-----------------+----------+----------+----------+----------+
