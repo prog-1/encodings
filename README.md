@@ -84,7 +84,7 @@ Common to all binary-to-text encoding schemes, Base64 is designed to carry data 
 
 Base64 is also widely used for sending e-mail attachments. This is required because SMTP—in its original form—was designed to transport 7-bit ASCII characters only. This encoding causes an overhead of 33–36% (33% by the encoding itself; up to 3% more by the inserted line breaks).
 
-### Base64 table from RFC 4648
+### RFC 4648
 
 See https://datatracker.ietf.org/doc/html/rfc4648#section-4
 
